@@ -1,0 +1,78 @@
+  START
+    // getComputerChoice Function : this function will generate a choice for the computer
+    FUNCTION getComputerChoice
+      SET randomNumber = generate random number from 0 to 2
+
+      IF randomNumber is 0 THEN
+        RETURN 'rock'
+      ELSE IF randomNumber is 1 THEN
+        RETURN 'paper'
+      ELSE randomNumber is 2 THEN
+        RETURN 'scissors' 
+    
+    END FUNCTION
+
+      // getHumanChoice Function : this function will open a prompt for user choice
+    FUNCTION getHumanChoice
+     // 1. Ask for input first
+      SET choice = INPUT "Enter rock, paper, or scissors: "
+      SET humanChoice = LOWERCASE(choice)
+      
+      // 2. This loop ONLY triggers if the input above was bad
+      WHILE humanChoice NOT EQUALS "rock" AND 
+            humanChoice NOT EQUALS "paper" AND 
+            humanChoice NOT EQUALS "scissors" DO
+
+        PRINT "Invalid choice! Please try again."
+        // open a prompt for user input
+        SET choice = INPUT "Enter rock, paper, or scissors: "
+        //set the choice to lowercase for case sensitivity
+        SET humanChoice = LOWERCASE(choice)
+      
+      END WHILE
+
+      RETURN humanChoice
+    END FUNCTION
+
+    //This function is for the game loop
+    FUNCTION playGame 
+      // this are the scores initially
+      SET humanScore = initially to 0
+      SET computerScore = initially to 0
+      
+      // this function is for the round logic
+      FUNCTION playRound(humanChoice, computerChoice)
+      // 1. Check for a tie match first
+        IF humanChoice EQUALS computerChoice THEN
+          PRINT "It's a tie! Both chose " + humanChoice
+                
+      // 2. Check all 3 human winning scenarios
+        ELSE IF humanChoice EQUALS "rock" AND computerChoice EQUALS "scissors" THEN
+          PRINT "You win! Rock beats Scissors."
+          SET humanScore += 1
+        
+        ELSE IF humanChoice EQUALS "paper" AND computerChoice EQUALS "rock" THEN
+          PRINT "You win! Paper beats Rock."
+          SET humanScore += 1
+                    
+        ELSE IF humanChoice EQUALS "scissors" AND computerChoice EQUALS "paper" THEN
+          PRINT "You win! Scissors beats Paper."
+          SET humanScore += 1
+                
+        // 3. If it is not a tie and human didn't win, computer must win
+        ELSE
+          PRINT "You lose! " + computerChoice + " beats " + humanChoice
+          SET computerScore += 1
+        
+        END IF
+
+      END FUNCTION
+
+      FOR round FROM 1 TO 5
+        SET humanChoice = CALL getHumanChoice()
+        SET computerChoice = CALL getComputerChoice()
+        CALL playRound(humanChoice, computerChoice)
+      END FOR 
+    END FUNCTION
+
+  END
